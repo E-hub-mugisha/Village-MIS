@@ -134,8 +134,7 @@
 <!-- 🟦 Add Modal -->
 <div class="modal fade" id="addBirthModal" tabindex="-1" aria-labelledby="addBirthModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <form method="POST" action="{{ route('birth_records.store') }}">
-            @csrf
+        
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Add New Birth Record</h5>
@@ -149,7 +148,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                 </div>
             </div>
-        </form>
+        
     </div>
 </div>
 @endsection

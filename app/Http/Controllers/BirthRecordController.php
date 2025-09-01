@@ -29,22 +29,22 @@ class BirthRecordController extends Controller
         return view('birth_records.create');
     }
 
-    public function store(Request $request)
+    public function storeData(Request $request)
     {
         $request->validate([
             'full_name' => 'required',
             'gender' => 'required',
-            'date_of_birth' => 'required|date',
+            'date_of_birth' => 'required',
             'place_of_birth' => 'required',
             'father_name' => 'required',
             'mother_name' => 'required',
             'informant_name' => 'required',
-            'registration_date' => 'required|date',
-            'province_id' => 'required|exists:provinces,id',
-            'district_id' => 'required|exists:districts,id',
-            'sector_id' => 'required|exists:sectors,id',
-            'cell_id' => 'required|exists:cells,id',
-            'village_id' => 'required|exists:villages,id',
+            'registration_date' => 'required',
+            'province_id' => 'required',
+            'district_id' => 'required',
+            'sector_id' => 'required',
+            'cell_id' => 'required',
+            'village_id' => 'required',
         ]);
 
         $yearOfBirth = date('Y', strtotime($request->date_of_birth));

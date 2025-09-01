@@ -26,6 +26,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('birth_records', BirthRecordController::class);
+    Route::post('birth_records/create', [BirthRecordController::class, 'storeData'])->name('birth_records.store');
     // Dependent dropdown AJAX routes
     Route::get('/get-districts/{province}', [BirthRecordController::class, 'getDistricts']);
     Route::get('/get-sectors/{district}', [BirthRecordController::class, 'getSectors']);

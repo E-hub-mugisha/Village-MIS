@@ -11,7 +11,6 @@ class BirthRecord extends Model
         'full_name',
         'gender',
         'date_of_birth',
-        'village',
         'certificate_number',
         'place_of_birth',
         'father_name',

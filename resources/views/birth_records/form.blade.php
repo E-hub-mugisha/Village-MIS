@@ -31,9 +31,9 @@
                 </div>
 
                 <div class="mb-3 col-md-6">
-                    <label for="hospital_or_clinic" class="form-label">Hospital or Clinic</label>
-                    <input type="text" class="form-control" name="hospital_or_clinic" id="hospital_or_clinic"
-                           value="{{ old('hospital_or_clinic', $birthRecord->hospital_or_clinic ?? '') }}" required>
+                    <label for="place_of_birth" class="form-label">Hospital or Clinic</label>
+                    <input type="text" class="form-control" name="place_of_birth" id="place_of_birth"
+                           value="{{ old('place_of_birth', $birthRecord->place_of_birth ?? '') }}" required>
                 </div>
             </div>
         </div>
