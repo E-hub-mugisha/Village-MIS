@@ -26,15 +26,15 @@
             <input type="month" class="form-control" id="filter-month">
         </div>
         <div class="col-md-2">
-            <button class="btn btn-primary btn-block" id="filter-btn">🔍 Filter</button>
+            <button class="btn btn-primary btn-block" id="filter-btn">Filter</button>
         </div>
     </div>
 
     <!-- 🟦 Add New Record Button -->
-    <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addBirthModal">🟦 Add New Birth Record</button>
+    <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addBirthModal">Add New Birth Record</button>
 
     <!-- Button to trigger modal -->
-    <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#birthReportModal">
+    <button type="button" class="btn btn-info mb-3" data-bs-toggle="modal" data-bs-target="#birthReportModal">
         Generate Birth Reports & Statistics
     </button>
 
@@ -99,8 +99,8 @@
                 <td>{{ optional($record->village)->name ?? 'N/A' }}</td>
                 <td>{{ $record->certificate_number }}</td>
                 <td>
-                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editModal{{ $record->id }}">✏️ Edit</button>
-                    <a href="{{ route('birth_records.certificate', $record->id) }}" class="btn btn-sm btn-secondary" target="_blank">📄 View PDF</a>
+                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editModal{{ $record->id }}">Edit</button>
+                    <a href="{{ route('birth_records.certificate', $record->id) }}" class="btn btn-sm btn-secondary" target="_blank">View PDF</a>
                 </td>
             </tr>
 

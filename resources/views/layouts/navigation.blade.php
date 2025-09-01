@@ -1,87 +1,121 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom mb-4">
-    <div class="container">
-        <!-- Logo -->
-        <a class="navbar-brand fw-bold" href="{{ route('dashboard') }}">
-            {{ config('app.name', 'Village MIS') }}
-        </a>
-
-        <!-- Toggle button for mobile -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <!-- Navbar content -->
-        <div class="collapse navbar-collapse" id="mainNavbar">
-            <!-- Left-side links -->
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">Dashboard</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('users.index') ? 'active' : '' }}" href="{{ route('users.index') }}">Users</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('birth_records.index') ? 'active' : '' }}" href="{{ route('birth_records.index') }}">Birth Records</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('birth.reports.index') ? 'active' : '' }}" href="{{ route('birth.reports.index') }}">Birth Reports</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('death_records.index') ? 'active' : '' }}" href="{{ route('death_records.index') }}">Death Records</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('death.reports.index') ? 'active' : '' }}" href="{{ route('death.reports.index') }}">Death Reports</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('populations.index') ? 'active' : '' }}" href="{{ route('populations.index') }}">Population Data</a>
-                </li>
-            </ul>
-
-            <!-- Right-side icons -->
-            <ul class="navbar-nav ms-auto align-items-center">
-                <!-- Notifications -->
-                <li class="nav-item dropdown">
-                    <a id="notificationsDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        🔔
-                        @if(auth()->user()->unreadNotifications->count() > 0)
+<div class="nk-header nk-header-fixed is-light">
+    <div class="container-fluid">
+        <div class="nk-header-wrap">
+            <div class="nk-menu-trigger d-xl-none ms-n1"><a href="#"
+                    class="nk-nav-toggle nk-quick-nav-icon" data-target="sidebarMenu"><em
+                        class="icon ni ni-menu"></em></a></div>
+            <div class="nk-header-brand d-xl-none"><a href="index.html" class="logo-link"><img
+                        class="logo-light logo-img" src="images/logo.png"
+                        srcset="/demo1/images/logo2x.png 2x" alt="logo"><img class="logo-dark logo-img"
+                        src="images/logo-dark.png" srcset="/demo1/images/logo-dark2x.png 2x"
+                        alt="logo-dark"></a></div>
+            <div class="nk-header-news d-none d-xl-block">
+                <div class="nk-news-list"><a class="nk-news-item" href="#">
+                        <div class="nk-news-icon"><em class="icon ni ni-card-view"></em></div>
+                        <div class="nk-news-text">
+                            <p>Do you know the latest update of 2022? <span> A overview of our is now
+                                    available on YouTube</span></p><em class="icon ni ni-external"></em>
+                        </div>
+                    </a></div>
+            </div>
+            <div class="nk-header-tools">
+                <ul class="nk-quick-nav">
+                    <li class="dropdown user-dropdown"><a href="#" class="dropdown-toggle"
+                            data-bs-toggle="dropdown">
+                            <div class="user-toggle">
+                                <div class="user-avatar sm"><em class="icon ni ni-user-alt"></em></div>
+                                <div class="user-info d-none d-md-block">
+                                    <div class="user-status">{{ Auth::user()->role }}</div>
+                                    <div class="user-name dropdown-indicator">{{ Auth::user()->name }}</div>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-md dropdown-menu-end dropdown-menu-s1">
+                            <div class="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
+                                <div class="user-card">
+                                    <div class="user-avatar"><span>{{ Auth::user()->name[0] }}</span></div>
+                                    <div class="user-info"><span class="lead-text">{{ Auth::user()->name }}</span><span
+                                            class="sub-text">{{ Auth::user()->email }}</span></div>
+                                </div>
+                            </div>
+                            <div class="dropdown-inner">
+                                <ul class="link-list">
+                                    <li><a href="user-profile-regular.html"><em
+                                                class="icon ni ni-user-alt"></em><span>View
+                                                Profile</span></a></li>
+                                    <li><a href="user-profile-setting.html"><em
+                                                class="icon ni ni-setting-alt"></em><span>Account
+                                                Setting</span></a></li>
+                                    <li><a href="user-profile-activity.html"><em
+                                                class="icon ni ni-activity-alt"></em><span>Login
+                                                Activity</span></a></li>
+                                </ul>
+                            </div>
+                            <div class="dropdown-inner">
+                                <ul class="link-list">
+                                    <li>
+                                        <form method="POST" action="{{ route('logout') }}">
+                                            @csrf
+                                            <button type="submit" class="dropdown-item"><em class="icon ni ni-signout"></em><span>Sign
+                                                    out</span></button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="dropdown notification-dropdown me-n1">
+                        <a href="#" class="dropdown-toggle nk-quick-nav-icon" data-bs-toggle="dropdown">
+                            <div class="icon-status icon-status-info"><em class="icon ni ni-bell"></em></div>
+                            @if(auth()->user()->unreadNotifications->count() > 0)
                             <span class="badge bg-danger">{{ auth()->user()->unreadNotifications->count() }}</span>
-                        @endif
-                    </a>
+                            @endif
+                        </a>
 
-                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown" style="width: 300px;">
-                        <h6 class="dropdown-header">Notifications</h6>
-                        @forelse(auth()->user()->unreadNotifications as $notification)
-                            <a href="#" class="dropdown-item">
-                                {{ $notification->data['message'] ?? 'New Notification' }}
-                                <br>
-                                <small class="text-muted">{{ $notification->created_at->diffForHumans() }}</small>
-                            </a>
-                        @empty
-                            <span class="dropdown-item text-muted">No new notifications</span>
-                        @endforelse
+                        <div class="dropdown-menu dropdown-menu-xl dropdown-menu-end dropdown-menu-s1">
+                            <div class="dropdown-head">
+                                <span class="sub-title nk-dropdown-title">Notifications</span>
+                                <a href="{{ route('notifications.markAllAsRead') }}">Mark All as Read</a>
+                            </div>
 
-                        <div class="dropdown-divider"></div>
-                        <a href="{{ route('notifications.markAllAsRead') }}" class="dropdown-item text-center text-primary">Mark all as read</a>
-                    </div>
-                </li>
+                            <div class="dropdown-body">
+                                <div class="nk-notification">
+                                    @forelse(auth()->user()->unreadNotifications as $notification)
+                                    <div class="nk-notification-item dropdown-inner">
+                                        <div class="nk-notification-icon">
+                                            <em class="icon icon-circle 
+                                @if($notification->type === 'App\Notifications\SomeImportantNotification') 
+                                    bg-warning-dim ni ni-curve-down-right 
+                                @else 
+                                    bg-success-dim ni ni-curve-down-left 
+                                @endif
+                            "></em>
+                                        </div>
+                                        <div class="nk-notification-content">
+                                            <div class="nk-notification-text">
+                                                {{ $notification->data['message'] ?? 'New Notification' }}
+                                            </div>
+                                            <div class="nk-notification-time">{{ $notification->created_at->diffForHumans() }}</div>
+                                        </div>
+                                    </div>
+                                    @empty
+                                    <div class="nk-notification-item dropdown-inner">
+                                        <div class="nk-notification-content">
+                                            <div class="nk-notification-text text-muted text-center">No new notifications</div>
+                                        </div>
+                                    </div>
+                                    @endforelse
+                                </div>
+                            </div>
 
-                <!-- User Dropdown -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-dark" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        {{ Auth::user()->name }}
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                        <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Profile</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li>
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button type="submit" class="dropdown-item">Log Out</button>
-                            </form>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
+                            <div class="dropdown-foot center">
+                                <a href="#">View All</a>
+                            </div>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
         </div>
     </div>
-</nav>
+</div>

@@ -10,8 +10,13 @@ use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    $totalRecords = \App\Models\BirthRecord::count();
+    $maleRecords = \App\Models\BirthRecord::where('gender', 'male')->count();
+    $femaleRecords = \App\Models\BirthRecord::where('gender', 'female')->count();
+    $recentRecords = \App\Models\BirthRecord::where('created_at', '>=', now()->subMonth())->get();
+
+    return view('home', compact('totalRecords', 'maleRecords', 'femaleRecords', 'recentRecords'));
+})->name('home');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
 
