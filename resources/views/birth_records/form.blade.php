@@ -40,9 +40,9 @@
     </div>
 
     {{-- Location Info --}}
-<div x-data="locationForm()" x-init="init()">
+<div x-data="locationForm()" class="row" x-init="init()">
     {{-- Province --}}
-    <div class="mb-3">
+    <div class="mb-3 col-md-6">
         <label for="province">Province</label>
         <select x-model="province" @change="fetchDistricts" class="form-control" name="province_id" required>
             <option value="">-- Select Province --</option>
@@ -53,7 +53,7 @@
     </div>
 
     {{-- District --}}
-    <div class="mb-3">
+    <div class="mb-3 col-md-6">
         <label for="district">District</label>
         <select x-model="district" @change="fetchSectors" class="form-control" name="district_id" required>
             <option value="">-- Select District --</option>
@@ -64,7 +64,7 @@
     </div>
 
     {{-- Sector --}}
-    <div class="mb-3">
+    <div class="mb-3 col-md-6">
         <label for="sector">Sector</label>
         <select x-model="sector" @change="fetchCells" class="form-control" name="sector_id" required>
             <option value="">-- Select Sector --</option>
@@ -75,7 +75,7 @@
     </div>
 
     {{-- Cell --}}
-    <div class="mb-3">
+    <div class="mb-3 col-md-6">
         <label for="cell">Cell</label>
         <select x-model="cell" @change="fetchVillages" class="form-control" name="cell_id" required>
             <option value="">-- Select Cell --</option>
@@ -86,7 +86,7 @@
     </div>
 
     {{-- Village --}}
-    <div class="mb-3">
+    <div class="mb-3 col-md-6">
         <label for="village">Village</label>
         <select x-model="village" class="form-control" name="village_id" required>
             <option value="">-- Select Village --</option>
