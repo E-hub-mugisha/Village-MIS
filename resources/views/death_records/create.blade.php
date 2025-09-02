@@ -14,13 +14,17 @@
                 <p><strong>Full Name:</strong> {{ $birthRecord->full_name }}</p>
                 <p><strong>Gender:</strong> {{ $birthRecord->gender }}</p>
                 <p><strong>Date of Birth:</strong> {{ date('d M, Y', strtotime($birthRecord->date_of_birth)) }}</p>
-                <p><strong>Place of Birth:</strong> {{ $birthRecord->village }}, {{ $birthRecord->sector }}, {{ $birthRecord->district }}</p>
+                <p><strong>Place of Birth:</strong>
+                    {{ optional($birthRecord->population?->village)->name }},
+                    {{ optional($birthRecord->population?->village?->cell?->sector)->name }},
+                    {{ optional($birthRecord->population?->village?->cell?->sector?->district)->name }}
+                </p>
             </div>
             <div class="col-md-6">
                 <p><strong>Father's Name:</strong> {{ $birthRecord->father_name }}</p>
                 <p><strong>Mother's Name:</strong> {{ $birthRecord->mother_name }}</p>
-                <p><strong>Village:</strong> {{ $birthRecord->village }}</p>
-                <p><strong>Registrar:</strong> {{ $birthRecord->user->name }}</p>
+                <p><strong>Village:</strong> {{ $birthRecord->population?->village?->name ?? '-' }}</p>
+                <p><strong>Registrar:</strong> {{ $birthRecord->user->name ?? '-' }}</p>
             </div>
         </div>
     </div>
@@ -37,13 +41,23 @@
                 <form method="POST" action="{{ route('death_records.store') }}">
                     @csrf
                     <input type="hidden" name="birth_record_id" value="{{ $birthRecord->id }}">
-                    
+
                     <div class="modal-header bg-danger text-white">
                         <h5 class="modal-title" id="deathRecordModalLabel">Death Record for {{ $birthRecord->full_name }}</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
                     <div class="modal-body">
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul class="mb-0">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label for="date_of_death" class="form-label">Date of Death</label>
@@ -86,4 +100,27 @@
         </div>
     </div>
 </div>
+
+<!-- Optional JavaScript to Auto-Calculate Age -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const dob = new Date("{{ $birthRecord->date_of_birth }}");
+        const dateOfDeathInput = document.getElementById('date_of_death');
+        const ageInput = document.getElementById('age');
+
+        if (dateOfDeathInput && ageInput) {
+            dateOfDeathInput.addEventListener('change', function () {
+                const dod = new Date(this.value);
+                if (dod && dob && !isNaN(dod) && !isNaN(dob)) {
+                    let age = dod.getFullYear() - dob.getFullYear();
+                    const m = dod.getMonth() - dob.getMonth();
+                    if (m < 0 || (m === 0 && dod.getDate() < dob.getDate())) {
+                        age--;
+                    }
+                    ageInput.value = age > 0 ? age : 0;
+                }
+            });
+        }
+    });
+</script>
 @endsection

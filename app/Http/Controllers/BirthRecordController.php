@@ -142,7 +142,6 @@ class BirthRecordController extends Controller
         return $pdf->download("BirthCertificate-{$record->certificate_number}.pdf");
     }
 
-    // AJAX for dependent dropdowns
     public function getDistricts($provinceId)
     {
         return response()->json(District::where('province_id', $provinceId)->get());

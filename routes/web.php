@@ -28,10 +28,12 @@ Route::middleware('auth')->group(function () {
     Route::resource('birth_records', BirthRecordController::class);
     Route::post('birth_records/create', [BirthRecordController::class, 'storeData'])->name('birth_records.store');
     // Dependent dropdown AJAX routes
-    Route::get('/get-districts/{province}', [BirthRecordController::class, 'getDistricts']);
-    Route::get('/get-sectors/{district}', [BirthRecordController::class, 'getSectors']);
-    Route::get('/get-cells/{sector}', [BirthRecordController::class, 'getCells']);
-    Route::get('/get-villages/{cell}', [BirthRecordController::class, 'getVillages']);
+
+
+    Route::get('/get-districts/{provinceId}', [BirthRecordController::class, 'getDistricts']);
+    Route::get('/get-sectors/{districtId}', [BirthRecordController::class, 'getSectors']);
+    Route::get('/get-cells/{sectorId}', [BirthRecordController::class, 'getCells']);
+    Route::get('/get-villages/{cellId}', [BirthRecordController::class, 'getVillages']);
     Route::get('birth_records/{id}/certificate', [BirthRecordController::class, 'downloadCertificate'])->name('birth_records.certificate');
 
     Route::resource('death_records', DeathRecordController::class);

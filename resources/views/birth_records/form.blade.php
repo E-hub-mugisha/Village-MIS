@@ -40,54 +40,63 @@
     </div>
 
     {{-- Location Info --}}
-    <div class="card mb-4">
-        <div class="card-header">Location Information</div>
-        <div class="card-body">
-            <div class="row">
-                <div class="mb-3 col-md-6">
-                    <label for="province" class="form-label">Province</label>
-                    <select id="province" class="form-control" name="province_id" required>
-                        <option value="">Select Province</option>
-                        @foreach($provinces as $province)
-                            <option value="{{ $province->id }}" {{ (old('province_id', $birthRecord->province_id ?? '') == $province->id) ? 'selected' : '' }}>{{ $province->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="mb-3 col-md-6">
-                    <label for="district" class="form-label">District</label>
-                    <select id="district" class="form-control" name="district_id" required>
-                        <option value="">Select District</option>
-                        {{-- Options loaded dynamically --}}
-                    </select>
-                </div>
-
-                <div class="mb-3 col-md-6">
-                    <label for="sector" class="form-label">Sector</label>
-                    <select id="sector" class="form-control" name="sector_id" required>
-                        <option value="">Select Sector</option>
-                        {{-- Options loaded dynamically --}}
-                    </select>
-                </div>
-
-                <div class="mb-3 col-md-6">
-                    <label for="cell" class="form-label">Cell</label>
-                    <select id="cell" class="form-control" name="cell_id" required>
-                        <option value="">Select Cell</option>
-                        {{-- Options loaded dynamically --}}
-                    </select>
-                </div>
-
-                <div class="mb-3 col-md-6">
-                    <label for="village" class="form-label">Village</label>
-                    <select id="village" class="form-control" name="village_id" required>
-                        <option value="">Select Village</option>
-                        {{-- Options loaded dynamically --}}
-                    </select>
-                </div>
-            </div>
-        </div>
+<div x-data="locationForm()" x-init="init()">
+    {{-- Province --}}
+    <div class="mb-3">
+        <label for="province">Province</label>
+        <select x-model="province" @change="fetchDistricts" class="form-control" name="province_id" required>
+            <option value="">-- Select Province --</option>
+            @foreach($provinces as $province)
+                <option value="{{ $province->id }}">{{ $province->name }}</option>
+            @endforeach
+        </select>
     </div>
+
+    {{-- District --}}
+    <div class="mb-3">
+        <label for="district">District</label>
+        <select x-model="district" @change="fetchSectors" class="form-control" name="district_id" required>
+            <option value="">-- Select District --</option>
+            <template x-for="item in districts" :key="item.id">
+                <option :value="item.id" x-text="item.name"></option>
+            </template>
+        </select>
+    </div>
+
+    {{-- Sector --}}
+    <div class="mb-3">
+        <label for="sector">Sector</label>
+        <select x-model="sector" @change="fetchCells" class="form-control" name="sector_id" required>
+            <option value="">-- Select Sector --</option>
+            <template x-for="item in sectors" :key="item.id">
+                <option :value="item.id" x-text="item.name"></option>
+            </template>
+        </select>
+    </div>
+
+    {{-- Cell --}}
+    <div class="mb-3">
+        <label for="cell">Cell</label>
+        <select x-model="cell" @change="fetchVillages" class="form-control" name="cell_id" required>
+            <option value="">-- Select Cell --</option>
+            <template x-for="item in cells" :key="item.id">
+                <option :value="item.id" x-text="item.name"></option>
+            </template>
+        </select>
+    </div>
+
+    {{-- Village --}}
+    <div class="mb-3">
+        <label for="village">Village</label>
+        <select x-model="village" class="form-control" name="village_id" required>
+            <option value="">-- Select Village --</option>
+            <template x-for="item in villages" :key="item.id">
+                <option :value="item.id" x-text="item.name"></option>
+            </template>
+        </select>
+    </div>
+</div>
+
 
     {{-- Parent & Informant Info --}}
     <div class="card mb-4">
@@ -132,86 +141,70 @@
     </div>
 </form>
 
-{{-- AJAX for dynamic dropdowns --}}
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-function loadDistricts(provinceId, selectedDistrictId = null) {
-    $('#district').html('<option value="">Select District</option>');
-    $('#sector').html('<option value="">Select Sector</option>');
-    $('#cell').html('<option value="">Select Cell</option>');
-    $('#village').html('<option value="">Select Village</option>');
-    if (provinceId) {
-        $.get(`/get-districts/${provinceId}`, function (data) {
-            data.forEach(function (item) {
-                let selected = (item.id == selectedDistrictId) ? 'selected' : '';
-                $('#district').append(`<option value="${item.id}" ${selected}>${item.name}</option>`);
-            });
-        });
-    }
+function locationForm() {
+    return {
+        // Initial values (set from Blade if editing)
+        province: '{{ old('province_id', $birthRecord->province_id ?? '') }}',
+        district: '{{ old('district_id', $birthRecord->district_id ?? '') }}',
+        sector: '{{ old('sector_id', $birthRecord->sector_id ?? '') }}',
+        cell: '{{ old('cell_id', $birthRecord->cell_id ?? '') }}',
+        village: '{{ old('village_id', $birthRecord->village_id ?? '') }}',
+
+        // Data arrays
+        districts: [],
+        sectors: [],
+        cells: [],
+        villages: [],
+
+        async init() {
+            if (this.province) {
+                await this.fetchDistricts();
+                if (this.district) {
+                    await this.fetchSectors();
+                    if (this.sector) {
+                        await this.fetchCells();
+                        if (this.cell) {
+                            await this.fetchVillages();
+                        }
+                    }
+                }
+            }
+        },
+
+        async fetchDistricts() {
+            this.districts = [];
+            this.sectors = [];
+            this.cells = [];
+            this.villages = [];
+            if (!this.province) return;
+            const res = await fetch(`/get-districts/${this.province}`);
+            this.districts = await res.json();
+        },
+
+        async fetchSectors() {
+            this.sectors = [];
+            this.cells = [];
+            this.villages = [];
+            if (!this.district) return;
+            const res = await fetch(`/get-sectors/${this.district}`);
+            this.sectors = await res.json();
+        },
+
+        async fetchCells() {
+            this.cells = [];
+            this.villages = [];
+            if (!this.sector) return;
+            const res = await fetch(`/get-cells/${this.sector}`);
+            this.cells = await res.json();
+        },
+
+        async fetchVillages() {
+            this.villages = [];
+            if (!this.cell) return;
+            const res = await fetch(`/get-villages/${this.cell}`);
+            this.villages = await res.json();
+        }
+    };
 }
-
-function loadSectors(districtId, selectedSectorId = null) {
-    $('#sector').html('<option value="">Select Sector</option>');
-    $('#cell').html('<option value="">Select Cell</option>');
-    $('#village').html('<option value="">Select Village</option>');
-    if (districtId) {
-        $.get(`/get-sectors/${districtId}`, function (data) {
-            data.forEach(function (item) {
-                let selected = (item.id == selectedSectorId) ? 'selected' : '';
-                $('#sector').append(`<option value="${item.id}" ${selected}>${item.name}</option>`);
-            });
-        });
-    }
-}
-
-function loadCells(sectorId, selectedCellId = null) {
-    $('#cell').html('<option value="">Select Cell</option>');
-    $('#village').html('<option value="">Select Village</option>');
-    if (sectorId) {
-        $.get(`/get-cells/${sectorId}`, function (data) {
-            data.forEach(function (item) {
-                let selected = (item.id == selectedCellId) ? 'selected' : '';
-                $('#cell').append(`<option value="${item.id}" ${selected}>${item.name}</option>`);
-            });
-        });
-    }
-}
-
-function loadVillages(cellId, selectedVillageId = null) {
-    $('#village').html('<option value="">Select Village</option>');
-    if (cellId) {
-        $.get(`/get-villages/${cellId}`, function (data) {
-            data.forEach(function (item) {
-                let selected = (item.id == selectedVillageId) ? 'selected' : '';
-                $('#village').append(`<option value="${item.id}" ${selected}>${item.name}</option>`);
-            });
-        });
-    }
-}
-
-$(document).ready(function() {
-    // Preload location selects if editing
-    @if(isset($birthRecord))
-        loadDistricts({{ $birthRecord->province_id }}, {{ $birthRecord->district_id }});
-        loadSectors({{ $birthRecord->district_id }}, {{ $birthRecord->sector_id }});
-        loadCells({{ $birthRecord->sector_id }}, {{ $birthRecord->cell_id }});
-        loadVillages({{ $birthRecord->cell_id }}, {{ $birthRecord->village_id }});
-    @endif
-
-    $('#province').change(function () {
-        loadDistricts($(this).val());
-    });
-
-    $('#district').change(function () {
-        loadSectors($(this).val());
-    });
-
-    $('#sector').change(function () {
-        loadCells($(this).val());
-    });
-
-    $('#cell').change(function () {
-        loadVillages($(this).val());
-    });
-});
 </script>
