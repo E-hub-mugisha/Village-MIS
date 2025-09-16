@@ -28,16 +28,22 @@ Route::middleware('auth')->group(function () {
     Route::resource('birth_records', BirthRecordController::class);
     Route::post('birth_records/create', [BirthRecordController::class, 'storeData'])->name('birth_records.store');
     // Dependent dropdown AJAX routes
-    Route::get('/get-districts/{province}', [BirthRecordController::class, 'getDistricts']);
-    Route::get('/get-sectors/{district}', [BirthRecordController::class, 'getSectors']);
-    Route::get('/get-cells/{sector}', [BirthRecordController::class, 'getCells']);
-    Route::get('/get-villages/{cell}', [BirthRecordController::class, 'getVillages']);
+
+
+    Route::get('/get-districts/{provinceId}', [BirthRecordController::class, 'getDistricts']);
+    Route::get('/get-sectors/{districtId}', [BirthRecordController::class, 'getSectors']);
+    Route::get('/get-cells/{sectorId}', [BirthRecordController::class, 'getCells']);
+    Route::get('/get-villages/{cellId}', [BirthRecordController::class, 'getVillages']);
     Route::get('birth_records/{id}/certificate', [BirthRecordController::class, 'downloadCertificate'])->name('birth_records.certificate');
 
-    Route::resource('death_records', DeathRecordController::class);
+    Route::get('/death_records', [DeathRecordController::class, 'index'])->name('death_records.index');
+    Route::post('/death-records/save', [DeathRecordController::class, 'saveRecord'])->name('death-record.saveRecord');
     Route::post('/death-records/search', [DeathRecordController::class, 'searchAndRedirect'])->name('death_records.searchAndRedirect');
-    Route::get('/death-records/create', [DeathRecordController::class, 'create'])->name('death_records.create');
-    Route::get('death_records/{id}/certificate', [DeathRecordController::class, 'certificate'])->name('death_records.certificate');
+    Route::get('/death-records/create/{birth_record_id}', [DeathRecordController::class, 'create'])->name('death_records.create');
+    Route::get('/death_records/{id}/certificate', [DeathRecordController::class, 'certificate'])->name('death_records.certificate');
+    Route::delete('/death-records/delete/{id}', [DeathRecordController::class, 'destroy'])->name('death_records.destroy');
+    Route::delete('/death-records/delete-all', [DeathRecordController::class, 'deleteAll'])->name('death_records.deleteAll');
+
 
     Route::prefix('death-reports')->controller(ReportController::class)->group(function () {
         Route::get('/', 'deathReport')->name('death.reports.index');

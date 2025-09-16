@@ -35,17 +35,17 @@ class DeathRecordController extends Controller
                 ->with('error', 'No matching birth record found. Please try again.');
         }
 
-        return redirect()->route('death_records.create', ['birth_record_id' => $birthRecord->id]);
+        return redirect()->route('death_records.create', $birthRecord->id);
     }
 
-    public function create(Request $request)
+    public function create(Request $request, $birth_record_id)
     {
-        $birthRecord = BirthRecord::findOrFail($request->birth_record_id);
+        $birthRecord = BirthRecord::findOrFail($birth_record_id);
         return view('death_records.create', compact('birthRecord'));
     }
 
     // Store new record
-    public function store(Request $request)
+    public function saveRecord(Request $request)
     {
         $request->validate([
             'full_name' => 'required|string|max:255',
@@ -156,5 +156,12 @@ class DeathRecordController extends Controller
         $pdf = Pdf::loadView('death_records.certificate', compact('record'));
 
         return $pdf->download('death_certificate_' . $record->certificate_number . '.pdf');
+    }
+
+    public function deleteAll()
+    {
+        DeathRecord::truncate(); // deletes all records
+
+        return redirect()->back()->with('success', 'All death records have been deleted successfully.');
     }
 }
