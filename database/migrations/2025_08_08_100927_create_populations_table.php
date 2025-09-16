@@ -24,14 +24,10 @@ return new class extends Migration
             $table->year('year');
 
             // Population numbers
-            $table->integer('total_population')->default(0);
-            $table->integer('male_population')->default(0);
-            $table->integer('female_population')->default(0);
-
-            // Optional: Age groups (you can extend this as needed)
-            $table->integer('age_0_14')->default(0);
-            $table->integer('age_15_64')->default(0);
-            $table->integer('age_65_plus')->default(0);
+            $table->integer('total_births')->default(0);
+            $table->integer('total_deaths')->default(0);
+            $table->integer('current_population')->default(0);
+            $table->string('status')->default('alive');
 
             $table->timestamps();
 
