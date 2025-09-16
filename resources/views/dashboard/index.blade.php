@@ -4,28 +4,40 @@
     <h2 class="mb-4">Dashboard & Statistics</h2>
 
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-2">
             <div class="card shadow p-3">
                 <h5>Births This Month</h5>
                 <p>{{ $monthlyBirths }}</p>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card shadow p-3">
-                <h5>Deaths This Month</h5>
-                <p>{{ $monthlyDeaths }}</p>
-            </div>
-        </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
             <div class="card shadow p-3">
                 <h5>Births This Year</h5>
                 <p>{{ $yearlyBirths }}</p>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
+            <div class="card shadow p-3">
+                <h5>Total Births</h5>
+                <p>{{ $totalBirths }}</p>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card shadow p-3">
+                <h5>Deaths This Month</h5>
+                <p>{{ $monthlyDeaths }}</p>
+            </div>
+        </div>
+        <div class="col-md-2">
             <div class="card shadow p-3">
                 <h5>Deaths This Year</h5>
                 <p>{{ $yearlyDeaths }}</p>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card shadow p-3">
+                <h5>Total Deaths</h5>
+                <p>{{ $totalDeaths }}</p>
             </div>
         </div>
     </div>

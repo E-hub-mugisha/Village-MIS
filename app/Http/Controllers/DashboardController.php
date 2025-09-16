@@ -15,6 +15,8 @@ class DashboardController extends Controller
         $currentMonth = Carbon::now()->month;
         $currentYear = Carbon::now()->year;
 
+        $totalBirths = BirthRecord::count();
+        $totalDeaths = DeathRecord::count();
         // Total stats
         $monthlyBirths = BirthRecord::whereMonth('date_of_birth', $currentMonth)->count();
         $yearlyBirths = BirthRecord::whereYear('date_of_birth', $currentYear)->count();
@@ -54,7 +56,7 @@ class DashboardController extends Controller
         return view('dashboard.index', compact(
             'monthlyBirths', 'yearlyBirths', 'monthlyDeaths', 'yearlyDeaths',
             'birthsByGender', 'deathsByGender', 'topVillagesBirths',
-            'topVillagesDeaths', 'ageGroups', 'deathCauses'
+            'topVillagesDeaths', 'ageGroups', 'deathCauses', 'totalBirths','totalDeaths'
         ));
     }
 }
