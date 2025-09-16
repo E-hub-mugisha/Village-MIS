@@ -98,7 +98,7 @@ class DeathRecordController extends Controller
             }
         }
 
-        return redirect()->back()->with('success', 'Death record added successfully and population updated.');
+        return redirect()->route('death_records.index')->with('success', 'Death record added successfully and population updated.');
     }
 
     // Show single record (for modal view)

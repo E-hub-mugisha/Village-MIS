@@ -9,9 +9,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Illuminate\Validation\Rules\Password;
 
 class RegisteredUserController extends Controller
 {
@@ -37,10 +37,10 @@ class RegisteredUserController extends Controller
                 'required',
                 'confirmed',
                 Password::min(8)
-                    ->mixedCase() // at least one upper and one lower case
-                    ->letters()   // ensure letters
-                    ->numbers()  // ensure numbers
-                    ->symbols(),  // ensure symbols
+            ->mixedCase() // at least one upper and one lower case
+            ->letters()
+            ->numbers()
+            ->symbols(),  // ensure symbols
             ],
         ]);
 

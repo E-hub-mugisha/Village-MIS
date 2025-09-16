@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BirthRecord;
+use App\Models\DeathRecord;
 use App\Models\Population;
 use App\Models\District;
 use App\Models\Sector;
@@ -128,12 +129,22 @@ class BirthRecordController extends Controller
     }
 
     public function destroy(string $id)
-    {
-        $record = BirthRecord::findOrFail($id);
-        $record->delete();
+{
+    // Use a DB transaction to ensure atomicity
+    DB::transaction(function () use ($id) {
+        // Find the birth record; fail if not found
+        $birth = BirthRecord::findOrFail($id);
+        
+        // Delete any related death record(s) first
+        // Using `->where(...)` and `->delete()` is better if there may be more than one
+        DeathRecord::where('birth_record_id', $id)->delete();
+        
+        // Delete the birth record
+        $birth->delete();
+    });
 
-        return redirect()->route('birth_records.index')->with('success', 'Birth record deleted.');
-    }
+    return redirect()->back()->with('success', 'Birth record and related death record(s) deleted.');
+}
 
     public function downloadCertificate($id)
     {
@@ -160,5 +171,12 @@ class BirthRecordController extends Controller
     public function getVillages($cellId)
     {
         return response()->json(Village::where('cell_id', $cellId)->get());
+    }
+
+     public function deleteAll()
+    {
+        BirthRecord::truncate(); // deletes all records
+
+        return redirect()->back()->with('success', 'All Birth records have been deleted successfully.');
     }
 }
