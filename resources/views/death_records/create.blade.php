@@ -38,9 +38,11 @@
     <div class="modal fade" id="deathRecordModal" tabindex="-1" aria-labelledby="deathRecordModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <form method="POST" action="{{ route('death_records.store') }}">
+                <form method="POST" action="{{ route('death-record.saveRecord') }}">
                     @csrf
                     <input type="hidden" name="birth_record_id" value="{{ $birthRecord->id }}">
+                    <input type="hidden" name="full_name" value="{{ $birthRecord->full_name }}">
+                    <input type="hidden" name="gender" value="{{ $birthRecord->gender }}">
 
                     <div class="modal-header bg-danger text-white">
                         <h5 class="modal-title" id="deathRecordModalLabel">Death Record for {{ $birthRecord->full_name }}</h5>
@@ -77,6 +79,11 @@
                             <div class="col-md-6">
                                 <label for="place_of_death" class="form-label">Place of Death</label>
                                 <input type="text" name="place_of_death" id="place_of_death" class="form-control" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="village" class="form-label">Village</label>
+                                <input type="text" name="village" id="village" class="form-control" required>
                             </div>
 
                             <div class="col-md-6">
